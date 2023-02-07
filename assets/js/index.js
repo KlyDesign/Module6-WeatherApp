@@ -2,21 +2,19 @@ let longi = '-97.7436995';
 let lati = '30.2711286';
 var name ='';
 var key = '15455303619284c5f93381ffcc0affd1';
+const CitytoClick = ['Atlanta', 'Denver', 'Seattle', 'San Francisco', 'Orlando', 'New York City' , 'Chicago', 'Austin', 'Houston'] 
 
-document.getElementById("submit").addEventListener('click', render) 
-function render(){
-    if(document.getElementById("inputs") !== undefined)
-    {
-        var city = document.getElementById("inputs").value;
-        
-            // const newButton = document.createElement("button");
-            // const cityText = document.createTextNode(`${city}`);
-            // newButton.appendChild(cityText);
-            // const searchList = document.getElementById(listOfSearch);
-            // console.log(listOfSearch)
-            // searchList.removeChild(searchList.lastElementChild)
-            // searchList.appendChildren(newButton);       
+
+document.getElementById("submit").addEventListener('click', searchInput) 
+function searchInput(city){
+    city = document.getElementById("inputs").value
+        render(city);
+        document.getElementById("inputs").innerText = ""; 
     }
+function buttonInput(buttonName){
+    render(buttonName.id)
+}
+function render(city){
     var requestOptions = {
     method: 'GET',
     redirect: 'follow'
@@ -47,30 +45,40 @@ function render(){
                 fetch(`https://api.openweathermap.org/data/2.5/forecast/?lat=${lati}&lon=${longi}&appid=${key}&units=imperial`, requestOptions)
                     .then(response => response.json())
                     .then((populateForcast) => {
-                        for(i =0; i < populateForcast.list.length; i++ ){
+                        var count = 0;
+                        for(i = 0; i < populateForcast.list.length; i++ ){
+                            
                             var UTCEval = new Date(populateForcast.list[i].dt *1000)
                             if(i > 0){
                                 let B = i - 1
                                 var yesterDate = new Date(populateForcast.list[B].dt *1000)
                                 if(splitdate(UTCEval)[1] > splitdate(yesterDate)[1]){
-                                    render(i)
-                                }
-                            }
-                            else if(i = 0){
-                                render(i)
-                            }
-                        }
-                        function render(i){
-                            for(i=1;i<=6;i++){
-                                    var day = document.getElementById(`${i}day`);
-                                    var temp = document.getElementById(`${i}temp`);
-                                    var wind = document.getElementById(`${i}wind`);
-                                    var hum = document.getElementById(`${i}hum`);
+                                    count = count+1;
+                                    console.log(`${splitdate(UTCEval)[1]}`)
+                                    var day = document.getElementById(`${count}day`);
+                                    var temp = document.getElementById(`${count}temp`);
+                                    var wind = document.getElementById(`${count}wind`);
+                                    var hum = document.getElementById(`${count}hum`);
                                     day.innerText = (`${UTCEval.toLocaleDateString()}`)
                                     temp.innerText = (`Temp: ${populateForcast.list[i].main.temp} F`)
                                     wind.innerText = (`Wind: ${populateForcast.list[i].wind.speed} MPH`)
                                     hum.innerText = (`Humidity: ${populateForcast.list[i].main.humidity}%`)
+                                    
+                                    const options = {month: '2-digit', day: '2-digit', hour12:false}
+                                    console.log('word'+ '  ' + UTCEval.toLocaleString(options))
                                 }
+                            }
+                            else if(i == 0){
+                                console.log('zero')
+                                var day = document.getElementById(`0day`);
+                                var temp = document.getElementById(`0temp`);
+                                var wind = document.getElementById('0wind');
+                                var hum = document.getElementById(`0hum`);
+                                day.innerText = (`${UTCEval.toLocaleDateString()}`)
+                                temp.innerText = (`Temp: ${populateForcast.list[i].main.temp} F`)
+                                wind.innerText = (`Wind: ${populateForcast.list[i].wind.speed} MPH`)
+                                hum.innerText = (`Humidity: ${populateForcast.list[i].main.humidity}%`)
+                        }
                         }
             
                                           
@@ -82,9 +90,16 @@ function render(){
             .catch(error => console.log('error', error));
     })
     .catch(error => console.log('error', error));
-    
-}
+}   
 function splitdate(dates) 
 {
     return dates.toLocaleDateString().split('/')
 }
+function createButtons(){
+    var e=0;
+    CitytoClick.forEach(element => {
+    console.log(element)
+    document.getElementById("listOfSearch").innerHTML += `<button onclick="buttonInput(${element})" id="${element}" class="m-2 mx-auto btn btn-success border border-light"  style="width:100%">${element}</button>`
+    })
+}
+createButtons()
