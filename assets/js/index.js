@@ -2,15 +2,16 @@ let longi = '-97.7436995';
 let lati = '30.2711286';
 var name ='';
 var key = '15455303619284c5f93381ffcc0affd1';
-const CitytoClick = ['Atlanta', 'Denver', 'Seattle', 'San Francisco', 'Orlando', 'New York City' , 'Chicago', 'Austin', 'Houston'] 
-
+let CitytoClick = ['Atlanta', 'Denver', 'Seattle', 'San Francisco', 'Orlando', 'New York City' , 'Chicago', 'Austin', 'Houston'] 
 
 document.getElementById("submit").addEventListener('click', searchInput) 
-function searchInput(city){
-    city = document.getElementById("inputs").value
-        render(city);
-        document.getElementById("inputs").innerText = ""; 
-    }
+function searchInput(){   
+    const city = document.getElementById("inputs").value
+    render(city);
+    console.log(city)
+    document.getElementById("inputs").value = ""; 
+    clearButtons(CitytoClick, city)
+}
 function buttonInput(buttonName){
     render(buttonName.id)
 }
@@ -95,11 +96,19 @@ function splitdate(dates)
 {
     return dates.toLocaleDateString().split('/')
 }
-function createButtons(){
-    var e=0;
-    CitytoClick.forEach(element => {
-    console.log(element)
+function createButtons(data){
+    console.log("BUTTIN")
+    data.forEach(element => {
     document.getElementById("listOfSearch").innerHTML += `<button onclick="buttonInput(${element})" id="${element}" class="m-2 mx-auto btn btn-success border border-light"  style="width:100%">${element}</button>`
     })
 }
-createButtons()
+function clearButtons(data, City){
+    console.log("BUTTIN Cleared")
+    document.getElementById("listOfSearch").innerHTML = '';
+    // let data = ['Atlanta', 'Denver', 'Seattle', 'San Francisco', 'Orlando', 'New York City' , 'Chicago', 'Austin', 'Houston'] 
+    data.pop();
+    data.unshift(City.charAt(0).toUpperCase() + City.slice(1))
+    createButtons(data);
+    return CitytoClick = data;
+}
+createButtons(CitytoClick)
