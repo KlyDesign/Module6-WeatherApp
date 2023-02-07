@@ -25,7 +25,7 @@ function render(city){
     method: 'GET',
     redirect: 'follow'
     };
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},us&limit=1&appid=${key}`, requestOptions)
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},us&limit=1&appid=${key}`, requestOptions)
     .then(response => response.json())
     .then(function(data){
         var cityName = data[0].name;
@@ -67,7 +67,7 @@ function render(city){
                                     var hum = document.getElementById(`${count}hum`);
 
                                     let iconVal = populateForcast.list[i].weather[0].icon;
-                                    icon.src = `http://openweathermap.org/img/w/${iconVal}.png`;
+                                    icon.src = `https://openweathermap.org/img/w/${iconVal}.png`;
                                     day.innerText = (`${UTCEval.toLocaleDateString()}`)
                                     temp.innerText = (`Temp: ${populateForcast.list[i].main.temp} F`)
                                     wind.innerText = (`Wind: ${populateForcast.list[i].wind.speed} MPH`)
@@ -83,7 +83,7 @@ function render(city){
                                 var hum = document.getElementById(`0hum`);
                                 let iconVal = populateForcast.list[i].weather[0].icon;
                                 
-                                icon.src = `http://openweathermap.org/img/w/${iconVal}.png`;
+                                icon.src = `https://openweathermap.org/img/w/${iconVal}.png`;
                                 day.innerText = (`${UTCEval.toLocaleDateString()}`)
                                 temp.innerText = (`Temp: ${populateForcast.list[i].main.temp} F`)
                                 wind.innerText = (`Wind: ${populateForcast.list[i].wind.speed} MPH`)
